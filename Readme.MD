@@ -12,7 +12,8 @@ It's a completely secure application using JWT Tokens, HTTP-Only Cookies, Signed
 - Setting up MongoDB Connection
 - Setting UP keys on OPENAI
 - Securing Authentication with Tokens and HTTP-only signed cookies
-- Validation added for Signup using Express Validator
+- Validation added for Signup and Signin using Express Validator
+- User Authentication added
 
 
 # Models
