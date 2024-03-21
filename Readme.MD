@@ -16,11 +16,11 @@ It's a completely secure application using JWT Tokens, HTTP-Only Cookies, Signed
 
 # Models
 -- User 
-    -- name
-    -- email
-    -- password
-    -- chats: Chat[]
+   -- name
+   -- email
+   -- password
+   -- chats: Chat[]
  --Chat
-    -- id
-    --role
-    --content
+   -- id
+   --role
+   --content
