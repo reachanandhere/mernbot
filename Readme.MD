@@ -16,6 +16,10 @@ It's a completely secure application using JWT Tokens, HTTP-Only Cookies, Signed
 - User Authentication added
 
 
+# Steps to Setup Frontend
+- Create react app
+- Install MUI, React icons, React Hot toast, React router dom
+
 # Models
 - User 
    - name
