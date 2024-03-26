@@ -17,3 +17,18 @@ code {
 .image-inverted {
   filter: invert(100%); 
 }
+
+.navLink {
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: auto 10px;
+  padding: 8px 20px;
+  text-decoration: none;
+  border-radius: 10px;
+  letter-spacing: 1px;
+}
+
+.MuiOutlinedInput-input-root.Mui-focused,
+.MuiOutlinedInput-notchedOutline {
+  border-color: white !important;
+}
