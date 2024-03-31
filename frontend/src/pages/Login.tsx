@@ -1,9 +1,26 @@
-import { Box } from "@mui/material";
-import React from "react";
+import { Box, Button } from "@mui/material";
+import { IoIosLogIn } from "react-icons/io";
 import airobot from "../components/shared/airobot.png";
-import CustomizedInout from "../components/shared/CustomizedInout";
+import CustomizedInput from "../components/shared/CustomizedInput";
+import { toast } from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const auth = useAuth();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    try {
+      toast.loading("Signing in!", { id: "login" });
+      await auth?.login(email, password);
+      toast.success("Signed in successfully!", { id: "login" });
+    } catch (err) {
+      toast.error("Sign in failed!", { id: "login" });
+    }
+  };
+
   return (
     <Box display="flex" flex={1} height={"100%"} width={"100%"}>
       <Box
@@ -13,7 +30,7 @@ const Login = () => {
       >
         <img src={airobot} style={{ width: "40vh" }} />
       </Box>
-     
+
       <Box
         display={"flex"}
         flex={{ xs: 1, md: 1 }}
@@ -24,6 +41,7 @@ const Login = () => {
         padding={2}
       >
         <form
+          onSubmit={handleSubmit}
           style={{
             margin: "auto",
             padding: "30px",
@@ -32,10 +50,29 @@ const Login = () => {
             borderRadius: "10px",
           }}
         >
-          <Box display={"flex"} flexDirection={"column"} justifyContent={"center"}>
-            <h2 style={{textAlign: 'center'}}>Login</h2>
-            <CustomizedInout type="email" name='email' label="Email" />
-            <CustomizedInout type="password" name='password' label="Password" />
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"center"}
+          >
+            <h2 style={{ textAlign: "center" }}>Login</h2>
+            <CustomizedInput type="email" name="email" label="Email" />
+            <CustomizedInput type="password" name="password" label="Password" />
+            <Button
+              type="submit"
+              sx={{
+                px: 2,
+                py: 2,
+                mt: 2,
+                width: "100%",
+                borderRadius: 2,
+                bgcolor: "#51538f",
+                color: "white",
+              }}
+              endIcon={<IoIosLogIn />}
+            >
+              Login
+            </Button>
           </Box>
         </form>
       </Box>

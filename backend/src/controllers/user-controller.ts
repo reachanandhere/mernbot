@@ -42,24 +42,24 @@ export const userSignUp = async (
     const user = new User({ name, email, password: hashedPassword });
     await user.save();
 
-  
-     //creating a token when user sign up
-     const token = createToken(user._id.toString(), user.email, "7d")
+    //creating a token when user sign up
+    const token = createToken(user._id.toString(), user.email, "7d");
 
-     //setting expiry date for cookie
-     const expires = new Date()
-     expires.setDate(expires.getDate()+7)
-     res.cookie(COOKIE_NAME, token, {
-       path: '/',
-       domain: 'localhost',
-       expires: expires,
-       httpOnly: true,
-       signed: true
-     })  
+    //setting expiry date for cookie
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
+    res.cookie(COOKIE_NAME, token, {
+      path: "/",
+      domain: "localhost",
+      expires: expires,
+      httpOnly: true,
+      signed: true,
+    });
 
     return res.status(201).json({
-      message: "Users signed up",
-      id: user._id.toString(),
+      message: "User signed up",
+      name: user.name,
+      email: user.email,
     });
   } catch (err) {
     // console.log(err);
@@ -78,7 +78,6 @@ export const userSignIn = async (
   //get user details for signup
   try {
     const { email, password } = req.body;
-   
     const user = await User.findOne({ email });
     if (!user) return res.status(401).send({ message: "User not registered!" });
     const isPasswordCorrect = await compare(password, user.password);
@@ -86,34 +85,63 @@ export const userSignIn = async (
     if (!isPasswordCorrect)
       return res.status(403).send({ message: "Incorrect password!" });
 
-
-    //clearning cookie if user logs in  
+    //clearning cookie if user logs in
     res.clearCookie(COOKIE_NAME, {
-      domain: 'localhost',
-      path: '/',
+      domain: "localhost",
+      path: "/",
       httpOnly: true,
-      signed: true
-    })
+      signed: true,
+    });
 
     //creating a token when user logs in
-    const token = createToken(user._id.toString(), user.email, "7d")
+    const token = createToken(user._id.toString(), user.email, "7d");
 
     //setting expiry date for cookie
-    const expires = new Date()
-    expires.setDate(expires.getDate()+7)
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
     res.cookie(COOKIE_NAME, token, {
-      path: '/',
-      domain: 'localhost',
+      path: "/",
+      domain: "localhost",
       expires: expires,
       httpOnly: true,
-      signed: true
-    })
-      return res.status(200).json({
-        message: "User signed in",
-        id: user._id.toString(),
-      });
+      signed: true,
+    });
+    return res.status(200).json({
+      message: "User signed in",
+      name: user.name,
+      email: user.email,
+    });
   } catch (err) {
     // console.log(err);
+    return res.status(200).json({
+      message: "Error",
+      cause: err.message,
+    });
+  }
+};
+
+export const verifyLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  //get user details for signup
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user)
+      return res
+        .status(401)
+        .send({ message: "User not registered or Token malfunctioned" });
+
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send({ message: "User and Token didnt match" });
+    }
+    return res.status(200).json({
+      message: "User signed in",
+      name: user.name,
+      email: user.email,
+    });
+  } catch (err) {
     return res.status(200).json({
       message: "Error",
       cause: err.message,
