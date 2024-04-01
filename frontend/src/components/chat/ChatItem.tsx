@@ -1,8 +1,9 @@
-import { Avatar, Box } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { coldarkCold } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 import openai from "../shared/openai.png";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 function extractCodeFromString(message: string) {
   if (message.includes("```")) {
@@ -23,7 +24,8 @@ function isCodeBlock(str: string) {
     str.includes("//")
   ) {
     return true;
-  } else return false;
+  } 
+  return false;
   
 }
 
@@ -32,7 +34,7 @@ const ChatItem = (props: { role: string; content: string }) => {
   const messageBlocks = extractCodeFromString(props.content);
 
   return props.role == "assistant" ? (
-    <Box sx={{ display: "flex", p: 2, bgcolor: "#004d5612", my: 2, gap: 2 }}>
+    <Box sx={{ display: "flex", p: 2, bgcolor: "#004d5612", my: 2, gap: 2,   borderRadius: 2, }}>
       <Avatar
         sx={{
           ml: "0",
@@ -40,7 +42,7 @@ const ChatItem = (props: { role: string; content: string }) => {
       >
         <img src={openai} width={"30px"} />
       </Avatar>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ alignItems: "center" }}>
         {!messageBlocks && (
           <h3
             style={{
@@ -57,13 +59,11 @@ const ChatItem = (props: { role: string; content: string }) => {
           messageBlocks.length &&
           messageBlocks.map((block) =>
             isCodeBlock(block) ? (
-              <SyntaxHighlighter style={coldarkCold} language="javascript">
+              <SyntaxHighlighter style={dracula} language="javascript">
                 {block}
               </SyntaxHighlighter>
             ) : (
-              <h3 style={{ color: "white", fontSize: "18px" }}>
-                {props.content}
-              </h3>
+              <Typography sx={{ fontSize: "20px" }}>{block}</Typography>
             )
           )}
       </Box>
