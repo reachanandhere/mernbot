@@ -50,6 +50,7 @@ const ChatItem = (props: { role: string; content: string }) => {
               display: "flex",
               alignItems: "center",
               fontSize: "18px",
+              marginTop: "8px"
             }}
           >
             {props.content}
@@ -80,7 +81,7 @@ const ChatItem = (props: { role: string; content: string }) => {
         {auth?.user?.name[0]}
       </Avatar>
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <h3 style={{ color: "white", fontSize: "18px" }}>{props.content}</h3>
+        <h3 style={{ color: "white", fontSize: "18px", marginTop: "8px" }}>{props.content}</h3>
       </Box>
     </Box>
   );

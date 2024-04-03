@@ -19,3 +19,10 @@ export const sendChatRequest = async(message:string)=>{
     const data = res.data
     return data
 }
+
+export const getUserChats = async()=>{
+    const res = await axios.get("/chats/all-chats")
+    if(res.status!=200) throw new Error("Unable to fetch chats")
+    const data = res.data
+    return data
+}
