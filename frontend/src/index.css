@@ -1,9 +1,7 @@
-
-
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto Slab', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto Slab",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -12,12 +10,12 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 .image-inverted {
-  filter: invert(100%); 
+  filter: invert(100%);
 }
 
 .navLink {
@@ -33,4 +31,46 @@ code {
 .MuiOutlinedInput-input-root.Mui-focused,
 .MuiOutlinedInput-notchedOutline {
   border-color: white !important;
+}
+
+.sidebar {
+  width: 20%;
+  margin: 0 auto;
+}
+
+.chatContainer {
+  width: 80%;
+  padding: 0;
+}
+
+.css-tc7wya-MuiAvatar-root {
+  width: 60px !important;
+  height: 60px !important;
+}
+
+.rotate {
+  animation : rotation 8s infinite linear;
+}
+
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@media (max-width: 600px ) {
+  .sidebar {
+    display: none;
+  }
+  .chatContainer {
+    margin: 0 auto;
+  }
+}
+
+.nav-link a {
+  color: white
 }

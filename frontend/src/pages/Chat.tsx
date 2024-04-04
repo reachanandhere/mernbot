@@ -3,7 +3,12 @@ import { Avatar, Box, Button } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 import { red } from "@mui/material/colors";
 import ChatItem from "../components/chat/ChatItem";
-import { getUserChats, sendChatRequest } from "../helpers/api-communicator";
+import { useNavigate } from "react-router-dom";
+import {
+  deleteChats,
+  getUserChats,
+  sendChatRequest,
+} from "../helpers/api-communicator";
 import toast from "react-hot-toast";
 
 type Message = {
@@ -12,9 +17,11 @@ type Message = {
 };
 
 const Chat = () => {
+  const navigate = useNavigate()
   const auth = useAuth();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [chatMessages, setChatMessages] = useState([] as Message[]);
+
   const handleSubmit = async () => {
     const content = inputRef?.current?.value as string;
     if (inputRef && inputRef.current) inputRef.current.value = "";
@@ -25,13 +32,34 @@ const Chat = () => {
     setChatMessages([...chatData.chats]);
   };
 
+  const handleDeleteChats = async () => {
+    try {
+      if(chatMessages.length==0) {
+        toast.success("No chats available to delete", { id: "deletechat" });
+        return;
+      }
+      toast.loading("Deleting Chats", { id: "deletechat" });
+      await deleteChats();
+      setChatMessages([]);
+      toast.success("Chats Deleted", { id: "deletechat" });
+    } catch (err) {
+      console.log(err);
+      toast.error("Error in deleting chats", { id: "deletechat" });
+    }
+  };
+
+
+  useEffect(()=>{
+    if(!auth?.user) navigate("/login")
+  },[])
+
   useEffect(() => {
     if (auth?.isLoggedIn && auth.user) {
-      toast.loading("Loading chats", { id: "loadchats" });
+      // toast.loading("Loading chats", { id: "loadchats" });
       getUserChats()
         .then((data) => {
           setChatMessages([...data.chats]);
-         toast.success("Chats loaded successfully", { id: "loadchats" });
+          toast.success("Chats loaded successfully", { id: "loadchats" });
         })
         .catch((err) => {
           console.log(err);
@@ -41,23 +69,17 @@ const Chat = () => {
   }, [auth]);
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         display: "flex",
         flex: 1,
         width: "100%",
         height: "100%",
-        mt: 3,
-        gap: 3,
+        marginTop: "20px",
+        gap: "5%",
       }}
     >
-      <Box
-        sx={{
-          display: { md: "flex", xs: "none", sm: "none" },
-          flex: 0.2,
-          mx: "auto",
-        }}
-      >
+      <div className="sidebar">
         <Box
           sx={{
             display: "flex",
@@ -81,16 +103,18 @@ const Chat = () => {
           >
             {auth?.user?.name[0]}
           </Avatar>
-          <h3>You are talking to a ChatBOT</h3>
+          <h3 style={{ fontSize: "28px" }}>You are talking to a ChatBOT</h3>
           <p style={{ marginTop: "10px" }}>
             You can ask some anything related to knowledge, business, advices,
             education etc. Avoid sharing personal information.
           </p>
 
           <Button
+            onClick={handleDeleteChats}
             sx={{
               width: "100%",
-              my: "auto",
+              mt: "80px",
+              mb: "80px",
               color: "white",
               fontWeight: 700,
               borderRadius: 3,
@@ -101,21 +125,14 @@ const Chat = () => {
             CLEAR CONVERSATION
           </Button>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flex: { md: 0.8, xs: 1, sm: 1 },
-          width: "100%",
-          flexDirection: "column",
-          padding: { md: "0", xs: "0 10px", sm: "0 10px" },
-        }}
-      >
+      </div>
+      <div className="chatContainer">
         <h1
           style={{
             fontWeight: "700",
             fontSize: "32px",
             margin: "0 auto 20px auto",
+            textAlign: 'center'
           }}
         >
           Model - GPT 3.5 Turbo
@@ -209,8 +226,8 @@ const Chat = () => {
             />
           </label>
         </div>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

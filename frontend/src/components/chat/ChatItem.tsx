@@ -60,7 +60,7 @@ const ChatItem = (props: { role: string; content: string }) => {
           messageBlocks.length &&
           messageBlocks.map((block) =>
             isCodeBlock(block) ? (
-              <SyntaxHighlighter style={dracula} language="javascript">
+              <SyntaxHighlighter style={dracula} language="javscript">
                 {block}
               </SyntaxHighlighter>
             ) : (

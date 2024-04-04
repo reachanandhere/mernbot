@@ -7,32 +7,35 @@ export const generateChatCompletion = async (
   res: Response,
   next: NextFunction
 ) => {
-  try{
+  try {
     const { message } = req.body;
-  const user = await User.findById(res.locals.jwtData.id);
-  if (!user)
-    return res
-      .status(401)
-      .json({ message: "User not registered or Token malfunctioned." });
-  //grab chats of user
-  //send all chats with the new one
-  const chats = user.chats.map(({ role, content }) => ({ role, content })) as ChatCompletionRequestMessage[];
-  chats.push({
-    role: "user",
-    content: message,
-  });
-  user.chats.push({ role: "user", content: message });
-  const config = configureOpenAi();
-  const openAI = new OpenAIApi(config)
-  const chatResponse = await openAI.createChatCompletion({
-    model: 'gpt-3.5-turbo-16k',
-    messages: chats
-  })
-  user.chats.push(chatResponse.data.choices[0].message)
-  await user.save()
-  return res.status(200).json({chats: user.chats})
-  } catch(err){
-    return res.status(200).json({message: "Something went wrong!"})
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user)
+      return res
+        .status(401)
+        .json({ message: "User not registered or Token malfunctioned." });
+    //grab chats of user
+    //send all chats with the new one
+    const chats = user.chats.map(({ role, content }) => ({
+      role,
+      content,
+    })) as ChatCompletionRequestMessage[];
+    chats.push({
+      role: "user",
+      content: message,
+    });
+    user.chats.push({ role: "user", content: message });
+    const config = configureOpenAi();
+    const openAI = new OpenAIApi(config);
+    const chatResponse = await openAI.createChatCompletion({
+      model: "gpt-3.5-turbo-16k",
+      messages: chats,
+    });
+    user.chats.push(chatResponse.data.choices[0].message);
+    await user.save();
+    return res.status(200).json({ chats: user.chats });
+  } catch (err) {
+    return res.status(200).json({ message: "Something went wrong!" });
   }
 };
 
@@ -55,6 +58,36 @@ export const sendUserChats = async (
     return res.status(200).json({
       message: "Chats",
       chats: user.chats,
+    });
+  } catch (err) {
+    return res.status(200).json({
+      message: "Error",
+      cause: err.message,
+    });
+  }
+};
+
+export const deleteChats = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  //get user details for signup
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user)
+      return res
+        .status(401)
+        .send({ message: "User not registered or Token malfunctioned" });
+
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send({ message: "User and Token didnt match" });
+    }
+    //@ts-ignore
+    user.chats = [];
+    await user.save();
+    return res.status(200).json({
+      message: "Chats deleted",
     });
   } catch (err) {
     return res.status(200).json({

@@ -4,8 +4,11 @@ import airobot from "../components/shared/airobot.png";
 import CustomizedInput from "../components/shared/CustomizedInput";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate =  useNavigate()
   const auth = useAuth();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -15,11 +18,18 @@ const Login = () => {
     try {
       toast.loading("Signing in!", { id: "login" });
       await auth?.login(email, password);
-      toast.success("Signed in successfully!", { id: "login" });
+      //toast.success("Signed in successfully!", { id: "login" });
+      navigate('/chat')
     } catch (err) {
       toast.error("Sign in failed!", { id: "login" });
     }
   };
+
+
+  useEffect(()=>{
+    if(auth?.user) navigate('/chat')
+  },[auth])
+
 
   return (
     <Box display="flex" flex={1} height={"100%"} width={"100%"}>

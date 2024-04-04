@@ -148,3 +148,39 @@ export const verifyLogin = async (
     });
   }
 };
+
+
+export const verifyLogout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  //get user details for signup
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user)
+      return res
+        .status(401)
+        .send({ message: "User not registered or Token malfunctioned" });
+
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send({ message: "User and Token didnt match" });
+    }
+
+    res.clearCookie(COOKIE_NAME, {
+      domain: "localhost",
+      path: "/",
+      httpOnly: true,
+      signed: true,
+    });
+
+    return res.status(200).json({
+      message: "User logged out"
+    });
+  } catch (err) {
+    return res.status(200).json({
+      message: "Error",
+      cause: err.message,
+    });
+  }
+};
