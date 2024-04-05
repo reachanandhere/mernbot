@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   async function checkStatus(){
     const data = await checkAuthStatus();
+    if(data.message) return;
     if(data) {
       setUser({email: data.email, name: data.name})
       setIsLoggedIn(true)

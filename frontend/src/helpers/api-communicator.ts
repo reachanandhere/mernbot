@@ -15,7 +15,7 @@ export const signupUser = async(name:string, email:string,password:string)=>{
 
 export const checkAuthStatus = async()=>{
     const res = await axios.get("/user/auth-status")
-    if(res.status!==200) return
+    if(res.status!==200) return { message : 'notFound' }
     const data = await res.data
     return data
 }

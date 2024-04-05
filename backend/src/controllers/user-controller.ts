@@ -77,7 +77,7 @@ export const userSignIn = async (
 ) => {
   //get user details for signup
   try {
-    const { email, password } = req.body;
+        const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) return res.status(401).send({ message: "User not registered!" });
     const isPasswordCorrect = await compare(password, user.password);
@@ -127,10 +127,10 @@ export const verifyLogin = async (
 ) => {
   //get user details for signup
   try {
-    const user = await User.findById(res.locals.jwtData.id);
+        const user = await User.findById(res.locals.jwtData.id);
     if (!user)
       return res
-        .status(401)
+        .status(201)
         .send({ message: "User not registered or Token malfunctioned" });
 
     if (user._id.toString() !== res.locals.jwtData.id) {
