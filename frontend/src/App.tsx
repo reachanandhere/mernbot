@@ -19,7 +19,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
      {auth?.isLoggedIn && auth?.user && <Route path="/chat" element={<Chat />} />}
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<Chat />} />
     </Routes>
   </main>;
 }

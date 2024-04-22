@@ -16,7 +16,7 @@ const Login = () => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     try {
-      toast.loading("Signing in!", { id: "login" });
+      // toast.loading("Signing in!", { id: "login" });
       await auth?.login(email, password);
       //toast.success("Signed in successfully!", { id: "login" });
       navigate('/chat')

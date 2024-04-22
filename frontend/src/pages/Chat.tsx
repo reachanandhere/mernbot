@@ -103,6 +103,7 @@ const Chat = () => {
           >
             {auth?.user?.name[0]}
           </Avatar>
+          <h3 style={{ fontSize: "28px", margin: 4 }}>Welcome {auth?.user?.name}!</h3>
           <h3 style={{ fontSize: "28px" }}>You are talking to a ChatBOT</h3>
           <p style={{ marginTop: "10px" }}>
             You can ask some anything related to knowledge, business, advices,
