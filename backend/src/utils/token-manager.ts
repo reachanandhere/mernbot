@@ -16,7 +16,7 @@ export const verifyToken = async (
   next: NextFunction
 ) => {
   const token = req.signedCookies[`${COOKIE_NAME}`];
-  if(!token || token.trim()==="") return res.status(201).json({message: "Token not received."})
+  if(!token || token.trim()==="") return res.status(200).json({message: "Token not received."})
   //verifying token
   return new Promise<void>((resolve, reject) => {
     return jwt.verify(token, process.env.JWT_SECRET, (err, success) => {
