@@ -50,8 +50,10 @@ const Chat = () => {
 
 
   useEffect(()=>{
-    if(!auth?.user) navigate("/login")
-  },[])
+    if(!auth?.isLoggedIn) {
+      return navigate("/login")
+    } 
+  },[auth])
 
   useEffect(() => {
     if (auth?.isLoggedIn && auth.user) {
@@ -80,7 +82,7 @@ const Chat = () => {
       }}
     >
       <div className="sidebar">
-        <Box
+        {auth?.user && <Box
           sx={{
             display: "flex",
             width: "100%",
@@ -101,7 +103,7 @@ const Chat = () => {
               fontWeight: 700,
             }}
           >
-            {auth?.user?.name[0]}
+           
           </Avatar>
           <h3 style={{ fontSize: "28px", margin: 4 }}>Welcome {auth?.user?.name}!</h3>
           <h3 style={{ fontSize: "28px" }}>You are talking to a ChatBOT</h3>
@@ -125,7 +127,7 @@ const Chat = () => {
           >
             CLEAR CONVERSATION
           </Button>
-        </Box>
+        </Box>}
       </div>
       <div className="chatContainer">
         <h1

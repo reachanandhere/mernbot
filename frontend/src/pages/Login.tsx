@@ -27,7 +27,7 @@ const Login = () => {
 
 
   useEffect(()=>{
-    if(auth?.user) navigate('/chat')
+    if(auth?.isLoggedIn) return navigate('/chat')
   },[auth])
 
 

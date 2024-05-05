@@ -28,7 +28,7 @@ const Signup = () => {
 
 
   useEffect(()=>{
-    if(auth?.user) navigate('/chat')
+    if(auth?.user) return navigate('/chat')
   },[auth])
 
 

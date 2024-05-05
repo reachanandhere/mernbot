@@ -8,20 +8,22 @@ import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./context/AuthContext";
 
-
-
 function App() {
-  const auth=useAuth()
-  return <main>
-    <Header />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-     {auth?.isLoggedIn && auth?.user && <Route path="/chat" element={<Chat />} />}
-      <Route path="*" element={<Chat />} />
-    </Routes>
-  </main>;
+  const auth = useAuth();
+  return (
+    <main>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        {auth?.isLoggedIn && auth?.user && (
+          <Route path="/chat" element={<Chat />} />
+        )}
+        <Route path="*" element={<Home />} />
+      </Routes>
+    </main>
+  );
 }
 
 export default App;
